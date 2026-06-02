@@ -1,4 +1,6 @@
 <div align="center">
+  <img src="./modestgames_banner.png" alt="ModestGames Banner" width="100%"/>
+  <br><br>
   <img src="./modestgames.png" alt="ModestGames Logo" width="100"/>
   <h1>ModestGames</h1>
   <p><strong>A sophisticated, fully autonomous free-game claiming engine for the Epic Games Store.</strong></p>
