@@ -1,29 +1,85 @@
-# Epic Games Free Game Auto-Claimer
+<div align="center">
+  <img src="https://img.icons8.com/color/120/000000/epic-games.png" alt="ModestGames Logo" width="100"/>
+  <h1>ModestGames</h1>
+  <p><strong>A sophisticated, fully autonomous free-game claiming engine for the Epic Games Store.</strong></p>
 
-A Python tool that runs on a GitHub Actions cron schedule to detect and automatically claim newly available free games on the Epic Games Store using browser-based session cookies and Playwright.
+  <p>
+    <img src="https://img.shields.io/github/license/w3Abhishek/ModestGames?style=flat-square&color=0078f2" alt="License">
+    <img src="https://img.shields.io/github/languages/top/w3Abhishek/ModestGames?style=flat-square&color=0078f2" alt="Language">
+    <img src="https://img.shields.io/github/actions/workflow/status/w3Abhishek/ModestGames/claim.yml?style=flat-square&color=0078f2" alt="Build Status">
+  </p>
+</div>
 
-## Features
-- **Auto-Claiming**: Checks Epic Games Store for free games and claims them automatically via Playwright headless Chromium.
-- **Cookie Authentication**: Operates entirely on user session cookies without needing a username/password or solving CAPTCHAs during the automated run.
-- **GitHub Secrets Sync**: Uses PyNaCl to securely re-encrypt and update the `EPIC_COOKIES` secret inside GitHub whenever cookies are refreshed by Epic.
-- **Telegram Notifications**: Sends Telegram messages to notify you of successful claims, missing cookies, or CAPTCHA challenges requiring human intervention.
-- **State Tracking**: Records claimed game `offer_id`s to avoid redundant claiming.
+<br>
 
-## Getting Started
+Welcome to **ModestGames**. Built on top of Python and Playwright, this tool completely automates the process of claiming free weekly games on the Epic Games Store. By leveraging your actual session cookies in a secure, headless Chromium environment, it bypasses complex authentication flows and interacts with the store exactly like a real human.
 
-1. Clone this repository to your own GitHub account.
-2. Run `pip install -r requirements.txt` and `playwright install chromium` locally.
-3. Run `python scripts/export_cookies.py`. A browser will open; log in to your Epic Games account and solve any CAPTCHAs. The script will output a JSON array of your cookies.
-4. Go to your GitHub repository settings > Secrets and variables > Actions. Add the following repository secrets:
-   - `EPIC_COOKIES`: The JSON output from step 3.
-   - `TELEGRAM_BOT_TOKEN`: The token for your Telegram Bot.
-   - `TELEGRAM_CHAT_ID`: Your Telegram Chat ID.
-   - `GITHUB_TOKEN` (optional but recommended): A Personal Access Token with repository write permissions to update the cookie secret.
-5. The GitHub Action will run automatically every Thursday at 9 AM UTC and 5 PM UTC, and Mondays at 9 AM UTC.
+Set it up once, push it to GitHub Actions, and let it build your library effortlessly in the background.
 
-## Local Execution
-Create a `.env` file from `config.example.env` and populate the variables, including pasting your JSON array directly into `EPIC_COOKIES`.
-Run the script locally using:
+## ✨ Features
+
+- **Automated Claiming Engine**: Silently fetches, filters, and purchases 100% discounted games every week.
+- **Zero-Touch Auth**: Operates exclusively on active session cookies. No usernames, no passwords, and no manual CAPTCHA solving during the automated runs.
+- **Auto-Updating Secrets**: Features an elegant local extraction script that instantly connects to your active browser, grabs the session, and uses the `gh` CLI to seamlessly re-encrypt and push your cookies to GitHub Secrets.
+- **Telegram Integrations**: Stay informed with rich notifications on successful claims, and get instant fallback alerts if your session expires or encounters a strict CAPTCHA challenge.
+- **State Awareness**: Persists claim history directly to the repository to avoid redundant network requests.
+
+---
+
+## 🚀 Getting Started
+
+### 1. Local Setup
+Clone the repository and install the required dependencies.
+
+```bash
+git clone https://github.com/w3Abhishek/ModestGames.git
+cd ModestGames
+pip install -r requirements.txt
+playwright install chromium
+```
+
+### 2. Connect & Extract Cookies
+You'll need to extract your session cookies. We've built a frictionless script to do this by connecting directly to your active browser.
+
+1. Launch Chrome or Edge with remote debugging enabled:
+   ```bash
+   "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222
+   ```
+2. Navigate to [store.epicgames.com](https://store.epicgames.com/) in that browser window and log in.
+3. Run the extraction script:
+   ```bash
+   python scripts/export_cookies.py
+   ```
+*If you have the `gh` CLI installed, the script will automatically upload the encrypted cookies to your GitHub Secrets. Otherwise, it will output a JSON array for manual entry.*
+
+### 3. GitHub Actions Configuration
+To run this autonomously, ensure your repository has the following secrets configured (Settings > Secrets and variables > Actions):
+
+| Secret Name | Description |
+| :--- | :--- |
+| `EPIC_COOKIES` | Your session cookies *(auto-configured by the script if `gh` CLI is present)* |
+| `TELEGRAM_BOT_TOKEN` | Token provided by [@BotFather](https://t.me/botfather) |
+| `TELEGRAM_CHAT_ID` | Your personal Telegram Chat ID |
+| `GITHUB_TOKEN` | A Personal Access Token (PAT) with `repo` scope to allow the bot to self-update cookies if needed |
+
+### 4. Autonomous Execution
+Once your secrets are set, the workflow will automatically execute:
+- **Thursdays at 9:00 AM UTC** (Just before the Epic Games rotation)
+- **Thursdays at 5:00 PM UTC** (Safety net post-rotation)
+- **Mondays at 9:00 AM UTC** (Weekly fallback check)
+
+---
+
+## 🛠️ Local Testing
+
+If you want to run the engine manually on your local machine, simply copy `config.example.env` to `.env`, populate your variables (pasting your JSON array into `EPIC_COOKIES`), and run:
+
 ```bash
 python -m claimer
 ```
+
+---
+
+<div align="center">
+  <i>Built with elegance and precision.</i>
+</div>
