@@ -1,0 +1,16 @@
+# Environments
+.env
+.env.*
+.venv
+env/
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Project specific
+store.epicgames.com.har
+claimed.json
+*.log
